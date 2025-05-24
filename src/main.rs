@@ -3,14 +3,16 @@ use std::io;
 use std::process;
 
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
-    if pattern == r"\w" {
-        input_line.chars().any(|c| c.is_alphanumeric())
-    } else if pattern == r"\d" {
-        input_line.chars().any(|c| c.is_ascii_digit())
-    } else if pattern.chars().count() == 1 {
-        input_line.contains(pattern)
-    } else {
-        panic!("Unhandled pattern: {}", pattern)
+    match pattern {
+        p if p.starts_with("[") && p.ends_with("]") && p.len() >= 2 => {
+            let inner = &p[1..p.len() - 1];
+            input_line
+                .chars()
+                .any(|c1| inner.chars().any(|c2| c1 == c2))
+        }
+        "\\w" => input_line.chars().any(|c| c.is_alphanumeric() || c == '_'),
+        "\\d" => input_line.chars().any(|c| c.is_ascii_digit()),
+        _ => input_line.contains(pattern),
     }
 }
 
