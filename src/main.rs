@@ -3,7 +3,9 @@ use std::io;
 use std::process;
 
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
-    if pattern == r"\d" {
+    if pattern == r"\w" {
+        input_line.chars().any(|c| c.is_alphanumeric())
+    } else if pattern == r"\d" {
         input_line.chars().any(|c| c.is_ascii_digit())
     } else if pattern.chars().count() == 1 {
         input_line.contains(pattern)
@@ -24,7 +26,11 @@ fn main() {
 
     io::stdin().read_line(&mut input_line).unwrap();
 
-    if match_pattern(&input_line, &pattern) {
+    let result = match_pattern(&input_line, &pattern);
+
+    println!("{}", result);
+
+    if result {
         process::exit(0)
     } else {
         process::exit(1)
