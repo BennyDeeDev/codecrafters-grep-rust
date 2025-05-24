@@ -5,10 +5,7 @@ use std::process;
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
     match pattern {
         p if p.starts_with("[") && p.ends_with("]") && p.len() >= 2 => {
-            let inner = &p[1..p.len() - 1];
-            input_line
-                .chars()
-                .any(|c1| inner.chars().any(|c2| c1 == c2))
+            input_line.contains(|c| pattern[1..pattern.len() - 1].contains(c))
         }
         "\\w" => input_line.chars().any(|c| c.is_alphanumeric() || c == '_'),
         "\\d" => input_line.chars().any(|c| c.is_ascii_digit()),
